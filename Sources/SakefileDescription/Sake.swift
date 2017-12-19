@@ -10,9 +10,9 @@ public final class Sake<T: RawRepresentable & CustomStringConvertible> where T.R
     
     fileprivate let utils: Utils = Utils()
     fileprivate let tasks: Tasks<T> = Tasks<T>()
-    fileprivate let tasksInitializer: (Tasks<T>) -> Void
+    fileprivate let tasksInitializer: (Tasks<T>) throws -> Void
     
-    public init(tasksInitializer: @escaping (Tasks<T>) -> Void) {
+    public init(tasksInitializer: @escaping (Tasks<T>) throws -> Void) {
         self.tasksInitializer = tasksInitializer
     }
     
@@ -29,7 +29,11 @@ public extension Sake {
     }
     
     func run(arguments: [String]) {
-        tasksInitializer(tasks)
+        do {
+            try tasksInitializer(tasks)
+        } catch {
+            print("> Error initializing tasks: \(error)")
+        }
         guard let argument = arguments.first else {
             print("> Error: Missing argument")
             exit(1)

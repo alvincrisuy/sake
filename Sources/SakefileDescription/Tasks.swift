@@ -47,14 +47,20 @@ public final class Tasks<T: RawRepresentable & CustomStringConvertible> where T.
     ///   - description: task description.
     ///   - dependencies: task dependencies.
     ///   - action: task action.
-    public func task(_ type: T, dependencies: [T] = [], action: @escaping (Utils) throws -> Void) {
+    public func task(_ type: T, dependencies: [T] = [], action: @escaping (Utils) throws -> Void) throws {
+        if tasks[type.rawValue] != nil {
+            throw "Trying to register task \(type.rawValue) that is already registered"
+        }
         tasks[type.rawValue] = Task(description: type.description, dependencies: dependencies.map({$0.rawValue}), action: action)
     }
     
     /// Adds a new task.
     ///
     /// - Parameter task: task to be added.
-    public func task(_ type: T, task: Task) {
+    public func task(_ type: T, task: Task) throws {
+        if tasks[type.rawValue] != nil {
+            throw "Trying to register task \(type.rawValue) that is already registered"
+        }
         tasks[type.rawValue] = task
     }
     
