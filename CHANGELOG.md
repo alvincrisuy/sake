@@ -2,6 +2,8 @@
 
 ## Next version
 
+### Added
+- Throw an error when trying to register the same task more than once https://github.com/xcodeswift/sake/pull/29 by @pepibumur.
 
 ## 0.2.0
 
